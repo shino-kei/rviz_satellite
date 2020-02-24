@@ -269,12 +269,15 @@ void AerialMapDisplay::update(float, float)
 
 void AerialMapDisplay::navFixCallback(sensor_msgs::NavSatFixConstPtr const& msg)
 {
-  ref_fix_ = *msg;
+  if (!std::isnan(msg->latitude) && !std::isnan(msg->longitude))
+  {
+    ref_fix_ = *msg;
 
-  // re-load imagery
-  received_msg_ = true;
-  loadImagery();
-  transformAerialMap();
+    // re-load imagery
+    received_msg_ = true;
+    loadImagery();
+    transformAerialMap();
+  }
 }
 
 void AerialMapDisplay::loadImagery()
